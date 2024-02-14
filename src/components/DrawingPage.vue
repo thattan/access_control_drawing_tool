@@ -99,8 +99,9 @@
         <img :src="require('../../assets/arrow_drop_down.svg')" width="24" height="24">
       </div>
       <div class="library-items-container" id="landscape-items">
-        <div class="library-item" v-for="item in imageList" @click="addImage(item.name)" @dragstart="dragStartImage(item)">
-          <img class="float-left" :src="item.src" width="45" height="45" >
+        <div class="library-item" v-for="item in imageList" @click="addImage(item.name)"
+          @dragstart="dragStartImage(item)">
+          <img class="float-left" :src="item.src" width="45" height="45">
           <div class="float-right library-item-text">{{ item.name }}</div>
         </div>
       </div>
@@ -299,7 +300,6 @@ export default {
               y2: autoLockY
             });
           } else {
-            //move the end of the fence line                                                                 
             this.line.set({
               x2: x,
               y2: y
@@ -411,7 +411,7 @@ export default {
           if (this.dontDrawEndCircle === false) {
             const x = this.line.x2 - this.lineCircleSize;
             const y = this.line.y2 - this.lineCircleSize;
-            
+
             this.createConnectCircle(x, y);
           }
 
@@ -599,35 +599,9 @@ export default {
     },
 
     createConnectLine(points) {
-      var lineSize = new fabric.Textbox('', {
-        name: 'test',
-        fontSize: 26,
-        fontFamily: 'sans-serif',
-        lineHeight: 1,
-        originX: 'center',
-        originY: 'center',
-        textAlign: 'center',
-        borderColor: '#999999',
-        padding: 0,
-        textBackgroundColor: 'transparent',
-        hoverCursor: 'default',
-        width: 100,
-        height: 20,
-        lockMovementX: true,
-        lockMovementY: true,
-        lockScalingX: true,
-        lockScalingY: true
-      });
-
-      lineSize.set('toObjectType', 'fenceSizeBox');
-
       this.line = new fabric.Line(points, {
-        isFence: true,
         stroke: 'black',
-        //name: 'fenceSegment' + segmentId,
-        // orientation: orientation,
         drawnDirection: 'none',
-        //fenceType: fType,
         perPixelTargetFind: true,
         strokeWidth: 5,
         //hasBorders: false,
@@ -636,27 +610,14 @@ export default {
         strokeUniform: true,
         lockSkewingX: true,
         lockSkewingY: true,
-        hoverCursor: 'crosshair',
-        lineLength: lineSize.name
+        hoverCursor: 'crosshair'
       });
-
-      //this.line.set('toObjectType', 'fence');
-
-      lineSize.set({
-        left: this.line.left - 5,
-        top: this.line.top - 5,
-      });
-
-      lineSize.setCoords();
 
       this.line.set('toObjectType', 'line');
 
       this.canvas.add(this.line);
-      this.canvas.add(lineSize);
 
       this.connectLines.push(this.line);
-
-      this.currentLineTextbox = lineSize;
     },
 
     changeDrawingMode(drawingMode) {
@@ -757,19 +718,6 @@ export default {
       this.currentDragImg = img;
     },
 
-    homeClick() {
-      this.showDrawing = !this.showDrawing;
-      const latlong = new google.maps.LatLng(41.2645421, -95.9716378);
-      const map = new google.maps.Map(document.getElementById('map'), {
-        center: latlong,
-        zoom: 20,
-        tilt: 0,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        scrollwheel: false,
-        mapTypeId: "satellite"
-      });
-    },
-
     addImage(name) {
       const image = imageList.find(x => x.name === name);
       this.canvas.selection = true;
@@ -786,15 +734,15 @@ export default {
           readOut: {
             imagetype: image.name
           },
-          selectable: true, // Make the image selectable
-          resizable: true, // Enable resizing   
-          lockRotation: false, // Allow rotation
+          selectable: true,
+          resizable: true,
+          lockRotation: false,
           lockScaling: false
         });
 
         that.canvas.add(oImg);
         that.allowRotateAndResize();
-        that.canvas.setActiveObject(oImg); // Set the image object as active
+        that.canvas.setActiveObject(oImg);
         //that.canvas.saveState();
       });
     },
@@ -817,6 +765,7 @@ export default {
       aTag.click();
     },
 
+    // TODO move to functions file
     fileToDataURI(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
